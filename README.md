@@ -27,7 +27,7 @@ Este projeto é uma implementação do popular jogo 2048, criado usando HTML, CS
 
 1. Clone este repositório:
    \`\`\`
-   git clone https://github.com/seu-usuario/2048-game.git
+   git clone https://github.com/aleksanderpalamar/2048.git
    \`\`\`
 2. Navegue até o diretório do projeto:
    \`\`\`
