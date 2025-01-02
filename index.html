@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>2048 <span>Version: 1.0</span></h1>
+    <p>Junte os números iguais para somá-los e chegar a 2048!</p>
+    <div class="levels">
+      <select id="difficulty">
+        <option value="easy">Fácil</option>
+        <option value="medium">Médio</option>
+        <option value="hard">Difícil</option>
+      </select>
+    </div>
+    <div class="score-container">
+      Pontuação Máxima: <span id="score">0</span>
+    </div>
+    <div id="game-board"></div>
+    <button type="reset" id="reset-button" onclick="resetGame()">
+      Reiniciar
+    </button>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
