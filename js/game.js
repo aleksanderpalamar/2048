@@ -1,19 +1,33 @@
 const gameBoard = document.getElementById('game-board');
 const scoreElement = document.getElementById('score');
+const difficultySelect = document.getElementById('difficulty');
+const startGameButton = document.getElementById('start-game');
+const timerElement = document.getElementById('timer');
+const timeElement = document.getElementById('time');
+const gameOverPopover = document.getElementById('game-over-popover');
+const tryAgainButton = document.getElementById('try-again-button');
+
 let board = [];
 let score = 0;
 let startX, startY, endX, endY;
+let difficulty = 'easy';
+let timerInterval;
+
+const DIFFICULTY_TIMES = {
+    easy: 30 * 60, // 30 minutes
+    medium: 15 * 60, // 15 minutes
+    hard: 10 * 60 // 10 minutes
+};
+
+let isGameOver = false;
 
 function initGame() {
     board = Array(4).fill().map(() => Array(4).fill(0));
     score = 0;
-    addNewTile();
+    isGameOver = false;
     addNewTile();
     updateBoard();
-}
-
-function resetGame() {
-    initGame();
+    resetTimer();
 }
 
 function addNewTile() {
@@ -45,6 +59,7 @@ function updateBoard() {
 }
 
 function move(direction) {
+    if (isGameOver) return;
     let moved = false;
     const newBoard = JSON.parse(JSON.stringify(board));
 
@@ -101,6 +116,37 @@ function move(direction) {
     }
 }
 
+function resetTimer() {
+    clearInterval(timerInterval);
+    timeLeft = DIFFICULTY_TIMES[difficulty];
+    updateTimerDisplay();
+    timerElement.style.display = 'block';
+}
+
+function startTimer() {
+    if (isGameOver) return;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            showGameOverPopover();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+function showGameOverPopover() {
+    gameOverPopover.classList.remove('hidden');
+    isGameOver = true;
+}
+
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowUp':
@@ -118,39 +164,56 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-gameBoard.addEventListener('mousedown', (event) => {
-    startX = event.clientX;
-    startY = event.clientY;
+gameBoard.addEventListener('mousedown', (e) => {
+    startX = e.clientX;
+    startY = e.clientY;
 });
 
-gameBoard.addEventListener('mouseup', (event) => {
-  endX = event.clientX;
-  endY = event.clientY;
-  handleSwipe();
+gameBoard.addEventListener('mouseup', (e) => {
+    endX = e.clientX;
+    endY = e.clientY;
+    handleSwipe();
 });
 
-gameBoard.addEventListener('touchstart', (event) => {
-  startX = event.touches[0].clientX;
-  startY = event.touches[0].clientY;
+gameBoard.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
 });
 
-gameBoard.addEventListener('touchend', (event) => {
-  endX = event.changedTouches[0].clientX;
-  endY = event.changedTouches[0].clientY;
-  handleSwipe();
+gameBoard.addEventListener('touchend', (e) => {
+    endX = e.changedTouches[0].clientX;
+    endY = e.changedTouches[0].clientY;
+    handleSwipe();
 });
 
 function handleSwipe() {
-  const dx = endX - startX;
-  const dy = endY - startY;
-  const absDx = Math.abs(dx);
-  const absDy = Math.abs(dy);
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const absDx = Math.abs(dx);
+    const absDy = Math.abs(dy);
 
-  if (absDx > absDy) {
-    move(dx > 0 ? 'right' : 'left');
-  } else {
-    move(dy > 0 ? 'down' : 'up');
-  }
+    if (Math.max(absDx, absDy) > 50) {
+        if (absDx > absDy) {
+            move(dx > 0 ? 'right' : 'left');
+        } else {
+            move(dy > 0 ? 'down' : 'up');
+        }
+    }
 }
+
+difficultySelect.addEventListener('change', (e) => {
+    difficulty = e.target.value;
+});
+
+startGameButton.addEventListener('click', () => {
+    initGame();
+    startTimer();
+});
+
+tryAgainButton.addEventListener('click', () => {
+    gameOverPopover.classList.add('hidden');
+    isGameOver = false;
+    initGame();
+});
 
 initGame();

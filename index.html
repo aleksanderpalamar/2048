@@ -1,32 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2048</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game</title>
+    <link rel="stylesheet" href="styles/style.css">
 </head>
-
 <body>
-  <div class="container">
-    <h1>2048 <span>Version: 1.0</span></h1>
-    <p>Junte os números iguais para somá-los e chegar a 2048!</p>
-    <div class="levels">
-      <select id="difficulty">
-        <option value="easy">Fácil</option>
-        <option value="medium">Médio</option>
-        <option value="hard">Difícil</option>
-      </select>
+    <div class="container">
+        <h1>2048</h1>
+        <div class="controls">
+            <select id="difficulty">
+                <option value="easy">Fácil</option>
+                <option value="medium">Médio</option>
+                <option value="hard">Difícil</option>
+            </select>
+            <button id="start-game">Iniciar Jogo</button>
+        </div>
+        <div class="score-container">Pontuação: <span id="score">0</span></div>
+        <div id="timer" class="timer">Tempo: <span id="time">05:00</span></div>
+        <div id="game-board"></div>
+        <div id="game-over-popover" class="poppover hidden">
+          <div class="popover-content">
+            <h2>Game Over!</h2>
+            <p>Tempo esgotado!</p>
+            <button id="try-again-button">Jogar Novamente</button>
+          </div>
+        </div>
     </div>
-    <div class="score-container">
-      Pontuação Máxima: <span id="score">0</span>
-    </div>
-    <div id="game-board"></div>
-    <button type="reset" id="reset-button" onclick="resetGame()">
-      Reiniciar
-    </button>
-  </div>
-  <script src="game.js"></script>
+    <script src="js/game.js"></script>
 </body>
 </html>
+
