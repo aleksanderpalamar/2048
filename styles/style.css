@@ -42,10 +42,31 @@ body {
   margin-bottom: 20px;
 }
 
-#difficulty, #start-game {
+#start-game {
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #776e65;
+  }
+}
+
+#difficulty {
   font-size: 16px;
   padding: 5px 10px;
   margin: 0 5px;
+  border-radius: 5px;
+  height: 40px;
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  cursor: pointer;
 }
 
 .score-container, .timer {
