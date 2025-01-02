@@ -24,13 +24,27 @@
             <button id="start-game">Iniciar Jogo</button>
         </div>
         <div class="score-container">Pontuação: <span id="score">0</span></div>
-        <div id="timer" class="timer">Tempo: <span id="time">05:00</span></div>
+        <div id="timer" class="timer">Tempo: <span id="time">00:00</span></div>
         <div id="game-board"></div>
         <div id="game-over-popover" class="poppover hidden">
           <div class="popover-content">
             <h2>Game Over!</h2>
             <p>Tempo esgotado!</p>
             <button id="try-again-button">Jogar Novamente</button>
+          </div>
+        </div>
+        <div id="congratulations-popover" class="popover hidden">
+          <div class="popover-content">
+            <h2>Parabéns!</h2>
+            <p>Você alcancou o número 2048!</p>
+            <button id="continue-button">Jogar Novamente</button>
+          </div>
+        </div>
+        <div id="no-moves-popover" class="popover hidden">
+          <div class="popover-content">
+            <h2>Game Over!</h2>
+            <p>Você não possui mais movimentos disponíveis!</p>
+            <button id="continue-button">Jogar Novamente</button>
           </div>
         </div>
     </div>

@@ -6,6 +6,9 @@ const timerElement = document.getElementById('timer');
 const timeElement = document.getElementById('time');
 const gameOverPopover = document.getElementById('game-over-popover');
 const tryAgainButton = document.getElementById('try-again-button');
+const congratulationsPopover = document.getElementById('congratulations-popover');
+const continueButton = document.getElementById('continue-button');
+const noMovesPopover = document.getElementById('no-moves-popover');
 
 let board = [];
 let score = 0;
@@ -78,6 +81,9 @@ function move(direction) {
                     row[i + 1] = 0;
                     score += row[i];
                     moved = true;
+                    if (row[i] === 2048) {
+                        showCongratulationsPopover();
+                    }
                 }
             } else {
                 if (row[3 - i] === row[2 - i]) {
@@ -85,6 +91,9 @@ function move(direction) {
                     row[2 - i] = 0;
                     score += row[3 - i];
                     moved = true;
+                    if (row[3 - i] === 2048) {
+                        showCongratulationsPopover();
+                    }
                 }
             }
         }
@@ -113,7 +122,29 @@ function move(direction) {
         board = newBoard;
         addNewTile();
         updateBoard();
+        if (!canMove()) {
+            showNoMovesPopover();
+        }
+    } else if (!canMove()) {
+        showNoMovesPopover();
     }
+}
+
+function canMove() {
+    for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 4; j++) {
+            if (board[i][j] === 0) {
+                return true;
+            }
+            if (j < 3 && board[i][j] === board[i][j + 1]) {
+                return true;
+            }
+            if (j < 3 && board[j][i] === board[i][j + 1]) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function resetTimer() {
@@ -145,6 +176,18 @@ function updateTimerDisplay() {
 function showGameOverPopover() {
     gameOverPopover.classList.remove('hidden');
     isGameOver = true;
+    clearInterval(timerInterval);
+}
+
+function showCongratulationsPopover() {
+    congratulationsPopover.classList.remove('hidden');
+    clearInterval(timerInterval);
+}
+
+function showNoMovesPopover() {
+    noMovesPopover.classList.remove('hidden');
+    isGameOver = true;
+    clearInterval(timerInterval);
 }
 
 document.addEventListener('keydown', (e) => {
