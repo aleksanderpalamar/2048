@@ -12,10 +12,30 @@ body {
   text-align: center;
 }
 
-h1 {
-  font-size: 48px;
+.game-instructions {
+  font-size: 12px;
   margin-bottom: 20px;
   color: #776e65;
+}
+
+.game-title {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #776e65;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-version {
+  font-size: 12px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
 .controls {
