@@ -8,15 +8,15 @@ Este projeto é uma implementação do popular jogo 2048, criado usando HTML, CS
 
 - Jogo 2048 clássico
 - Três níveis de dificuldade:
-  - Fácil: Sem limite de tempo
-  - Médio: Cronômetro com 5 minutos
-  - Difícil: Cronômetro com 5 minutos, mas mais rápido
+  - Fácil: Cronômetro com 30 minutos
+  - Médio: Cronômetro com 15 minutos
+  - Difícil: Cronômetro com 10 minutos
 - Controles por teclado (setas) e mouse/toque (swipe)
 - Design responsivo
 
 ## Como Jogar
 
-1. Abra o arquivo \`index.html\` em seu navegador
+1. Abra o arquivo `index.html` em seu navegador
 2. Selecione o nível de dificuldade desejado
 3. Clique em "Iniciar Jogo"
 4. Use as setas do teclado ou deslize com o mouse/dedo para mover as peças
@@ -26,14 +26,14 @@ Este projeto é uma implementação do popular jogo 2048, criado usando HTML, CS
 ## Instalação
 
 1. Clone este repositório:
-   \`\`\`
+   ```
    git clone https://github.com/aleksanderpalamar/2048.git
-   \`\`\`
+   ```
 2. Navegue até o diretório do projeto:
-   \`\`\`
+   ```
    cd 2048
-   \`\`\`
-3. Abra o arquivo \`index.html\` em seu navegador preferido
+   ```
+3. Abra o arquivo `index.html` em seu navegador preferido
 
 ## Tecnologias Utilizadas
 
@@ -43,16 +43,16 @@ Este projeto é uma implementação do popular jogo 2048, criado usando HTML, CS
 
 ## Estrutura do Projeto
 
-- \`index.html\`: Estrutura HTML do jogo
-- \`style.css\`: Estilos CSS para o layout e aparência do jogo
-- \`script.js\`: Lógica do jogo em JavaScript
+- `index.html`: Estrutura HTML do jogo
+- `styles/style.css`: Estilos CSS para o layout e aparência do jogo
+- `js/game.js`: Lógica do jogo em JavaScript
 
 ## Como Contribuir
 
 1. Faça um fork do projeto
-2. Crie uma nova branch (\`git checkout -b feature/nova-funcionalidade\`)
-3. Faça commit das suas alterações (\`git commit -am 'Adiciona nova funcionalidade'\`)
-4. Faça push para a branch (\`git push origin feature/nova-funcionalidade\`)
+2. Crie uma nova branch (`git checkout -b feature/nova-funcionalidade`)
+3. Faça commit das suas alterações (`git commit -am 'Adiciona nova funcionalidade'`)
+4. Faça push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Crie um novo Pull Request
 
 ## Licença
