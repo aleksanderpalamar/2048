@@ -31,7 +31,7 @@ Este projeto é uma implementação do popular jogo 2048, criado usando HTML, CS
    \`\`\`
 2. Navegue até o diretório do projeto:
    \`\`\`
-   cd 2048-game
+   cd 2048
    \`\`\`
 3. Abra o arquivo \`index.html\` em seu navegador preferido
 
