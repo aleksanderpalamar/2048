@@ -1,3 +1,10 @@
+import { GRID_SIZE, DIFFICULTY_TIMES } from '../src/constants.js';
+import { createEmptyBoard, findEmptyTiles, hasValidMoves } from '../src/utils/boardUtils.js';
+import { moveLeft, moveRight, moveUp, moveDown } from '../src/utils/moveUtils.js';
+import { formatTime } from '../src/utils/timerUtils.js';
+import { handleSwipeGesture } from '../src/utils/inputUtils.js';
+
+// DOM Elements
 const gameBoard = document.getElementById('game-board');
 const scoreElement = document.getElementById('score');
 const difficultySelect = document.getElementById('difficulty');
@@ -11,23 +18,18 @@ const continueButton = document.getElementById('continue-button');
 const noMovesPopover = document.getElementById('no-moves-popover');
 const tryAgainNoMovesButton = document.getElementById('try-again-no-moves-button');
 
+// Game State
 let board = [];
 let score = 0;
 let startX, startY, endX, endY;
 let difficulty = 'easy';
 let timerInterval;
-
-const DIFFICULTY_TIMES = {
-    easy: 30 * 60, // 30 minutos
-    medium: 15 * 60, // 15 minutos
-    hard: 10 * 60 // 10 minutos
-};
+let isGameOver = false;
 let timeLeft;
 
-let isGameOver = false;
-
+// Game Functions
 function initGame() {
-    board = Array(4).fill().map(() => Array(4).fill(0));
+    board = createEmptyBoard();
     score = 0;
     isGameOver = false;
     addNewTile();
@@ -37,119 +39,66 @@ function initGame() {
 }
 
 function addNewTile() {
-    const emptyTiles = [];
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            if (board[i][j] === 0) {
-                emptyTiles.push({row: i, col: j});
-            }
-        }
-    }
+    const emptyTiles = findEmptyTiles(board);
     if (emptyTiles.length > 0) {
-        const {row, col} = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
-        board[row][col] = Math.random() < 0.9 ? 2 : 4;
+        const { row, col } = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+        board[row][col] = 2;
     }
 }
 
 function updateBoard() {
     gameBoard.innerHTML = '';
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
+    for (let row = 0; row < GRID_SIZE; row++) {
+        for (let col = 0; col < GRID_SIZE; col++) {
             const tile = document.createElement('div');
-            tile.className = `tile tile-${board[i][j]}`;
-            tile.textContent = board[i][j] || '';
+            tile.className = `tile tile-${board[row][col]}`;
+            tile.textContent = board[row][col] || '';
             gameBoard.appendChild(tile);
         }
     }
-    scoreElement.textContent = score;
+    scoreElement.textContent = score.toString();
+}
+
+function updateScore(value) {
+    score += value;
+    if (value === 2048) {
+        showCongratulationsPopover();
+    }
 }
 
 function move(direction) {
     if (isGameOver) return;
-    let moved = false;
-    const newBoard = JSON.parse(JSON.stringify(board));
 
-    function pushTiles(row) {
-        const filteredRow = row.filter(tile => tile !== 0);
-        const missingTiles = 4 - filteredRow.length;
-        const zeros = Array(missingTiles).fill(0);
-        return direction === 'left' ? [...filteredRow, ...zeros] : [...zeros, ...filteredRow];
+    const previousBoard = JSON.stringify(board);
+    let currentBoard = board.map(row => [...row]);
+    
+    switch (direction) {
+        case 'up':
+            currentBoard = moveUp(currentBoard, updateScore);
+            break;
+        case 'down':
+            currentBoard = moveDown(currentBoard, updateScore);
+            break;
+        case 'left':
+            currentBoard = moveLeft(currentBoard, updateScore);
+            break;
+        case 'right':
+            currentBoard = moveRight(currentBoard, updateScore);
+            break;
     }
 
-    function mergeTiles(row) {
-        for (let i = 0; i < 3; i++) {
-            if (direction === 'left') {
-                if (row[i] === row[i + 1]) {
-                    row[i] *= 2;
-                    row[i + 1] = 0;
-                    score += row[i];
-                    moved = true;
-                    if (row[i] === 2048) {
-                        showCongratulationsPopover();
-                    }
-                }
-            } else {
-                if (row[3 - i] === row[2 - i]) {
-                    row[3 - i] *= 2;
-                    row[2 - i] = 0;
-                    score += row[3 - i];
-                    moved = true;
-                    if (row[3 - i] === 2048) {
-                        showCongratulationsPopover();
-                    }
-                }
-            }
-        }
-        return row;
-    }
-
-    for (let i = 0; i < 4; i++) {
-        let row = direction === 'up' || direction === 'down'
-            ? [newBoard[0][i], newBoard[1][i], newBoard[2][i], newBoard[3][i]]
-            : newBoard[i];
-
-        row = pushTiles(row);
-        row = mergeTiles(row);
-        row = pushTiles(row);
-
-        if (direction === 'up' || direction === 'down') {
-            for (let j = 0; j < 4; j++) {
-                newBoard[j][i] = row[j];
-            }
-        } else {
-            newBoard[i] = row;
-        }
-    }
-
-    if (JSON.stringify(board) !== JSON.stringify(newBoard)) {
-        board = newBoard;
+    if (JSON.stringify(currentBoard) !== previousBoard) {
+        board = currentBoard;
         addNewTile();
         updateBoard();
-        if (!canMove()) {
+        
+        if (!hasValidMoves(board)) {
             showNoMovesPopover();
         }
-    } else if (!canMove()) {
-        showNoMovesPopover();
     }
 }
 
-function canMove() {
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            if (board[i][j] === 0) {
-                return true;
-            }
-            if (i < 3 && board[i][j] === board[i + 1][j]) {
-                return true;
-            }
-            if (j < 3 && board[i][j] === board[i][j + 1]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
+// Timer Functions
 function resetTimer() {
     clearInterval(timerInterval);
     timeLeft = DIFFICULTY_TIMES[difficulty];
@@ -171,11 +120,10 @@ function startTimer() {
 }
 
 function updateTimerDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    timeElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    timeElement.textContent = formatTime(timeLeft);
 }
 
+// Popover Functions
 function showGameOverPopover() {
     gameOverPopover.classList.remove('hidden');
     isGameOver = true;
@@ -193,6 +141,7 @@ function showNoMovesPopover() {
     clearInterval(timerInterval);
 }
 
+// Event Listeners
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowUp':
@@ -209,6 +158,13 @@ document.addEventListener('keydown', (e) => {
             break;
     }
 });
+
+function handleSwipe() {
+    const direction = handleSwipeGesture(startX, startY, endX, endY);
+    if (direction) {
+        move(direction);
+    }
+}
 
 gameBoard.addEventListener('mousedown', (e) => {
     startX = e.clientX;
@@ -232,21 +188,7 @@ gameBoard.addEventListener('touchend', (e) => {
     handleSwipe();
 });
 
-function handleSwipe() {
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const absDx = Math.abs(dx);
-    const absDy = Math.abs(dy);
-
-    if (Math.max(absDx, absDy) > 50) {
-        if (absDx > absDy) {
-            move(dx > 0 ? 'right' : 'left');
-        } else {
-            move(dy > 0 ? 'down' : 'up');
-        }
-    }
-}
-
+// UI Event Listeners
 difficultySelect.addEventListener('change', (e) => {
     difficulty = e.target.value;
 });
@@ -275,4 +217,5 @@ tryAgainNoMovesButton.addEventListener('click', () => {
     startTimer();
 });
 
+// Initialize the game
 initGame();

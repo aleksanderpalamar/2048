@@ -93,7 +93,20 @@ body {
   font-weight: bold;
   background-color: #eee4da;
   border-radius: 5px;
-  transition: all 0.1s;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  animation: tile-appear 0.2s ease-in-out;
+}
+
+@keyframes tile-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .tile-2 { background-color: #eee4da; color: #776e65; }
