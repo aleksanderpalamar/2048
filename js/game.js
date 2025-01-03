@@ -9,6 +9,7 @@ const tryAgainButton = document.getElementById('try-again-button');
 const congratulationsPopover = document.getElementById('congratulations-popover');
 const continueButton = document.getElementById('continue-button');
 const noMovesPopover = document.getElementById('no-moves-popover');
+const tryAgainNoMovesButton = document.getElementById('try-again-no-moves-button');
 
 let board = [];
 let score = 0;
@@ -17,10 +18,11 @@ let difficulty = 'easy';
 let timerInterval;
 
 const DIFFICULTY_TIMES = {
-    easy: 30 * 60, // 30 minutes
-    medium: 15 * 60, // 15 minutes
-    hard: 10 * 60 // 10 minutes
+    easy: 30 * 60, // 30 minutos
+    medium: 15 * 60, // 15 minutos
+    hard: 10 * 60 // 10 minutos
 };
+let timeLeft;
 
 let isGameOver = false;
 
@@ -28,6 +30,7 @@ function initGame() {
     board = Array(4).fill().map(() => Array(4).fill(0));
     score = 0;
     isGameOver = false;
+    addNewTile();
     addNewTile();
     updateBoard();
     resetTimer();
@@ -136,10 +139,10 @@ function canMove() {
             if (board[i][j] === 0) {
                 return true;
             }
-            if (j < 3 && board[i][j] === board[i][j + 1]) {
+            if (i < 3 && board[i][j] === board[i + 1][j]) {
                 return true;
             }
-            if (j < 3 && board[j][i] === board[i][j + 1]) {
+            if (j < 3 && board[i][j] === board[i][j + 1]) {
                 return true;
             }
         }
@@ -257,6 +260,19 @@ tryAgainButton.addEventListener('click', () => {
     gameOverPopover.classList.add('hidden');
     isGameOver = false;
     initGame();
+    startTimer();
+});
+
+continueButton.addEventListener('click', () => {
+    congratulationsPopover.classList.add('hidden');
+    startTimer();
+});
+
+tryAgainNoMovesButton.addEventListener('click', () => {
+    noMovesPopover.classList.add('hidden');
+    isGameOver = false;
+    initGame();
+    startTimer();
 });
 
 initGame();
