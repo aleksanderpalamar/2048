@@ -1,9 +1,11 @@
-import { GameController } from './controllers/GameController'
-import { GameView } from './views/GameView';
-import { handleSwipeGesture } from './utils/inputUtils';
-import { DownMoveStrategy, LeftMoveStrategy, RightMoveStrategy, UpMoveStrategy } from './strategies/MoveStrategies';
+import { GameController } from './controllers/GameController.js';
+import { GameView } from './views/GameView.js';
+import { handleSwipeGesture } from './utils/inputUtils.js';
+import { DownMoveStrategy, LeftMoveStrategy, RightMoveStrategy, UpMoveStrategy } from './strategies/MoveStrategies.js';
+
 const view = new GameView();
 const controller = new GameController(view);
+
 // Event Listeners
 document.addEventListener('keydown', (e) => {
     switch (e.key) {
