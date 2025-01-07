@@ -1,4 +1,4 @@
-import { GRID_SIZE } from '../../src/constants.js';
+import { GRID_SIZE } from '../constants.js';
 export function createEmptyBoard() {
     return Array(GRID_SIZE).fill(null).map(() => Array(GRID_SIZE).fill(0));
 }

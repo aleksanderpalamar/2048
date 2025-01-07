@@ -1,22 +1,22 @@
+import { DIFFICULTY_TIMES } from '../constants.js';
 import { createEmptyBoard, findEmptyTiles, hasValidMoves } from '../utils/boardUtils.js';
 export class GameModel {
     constructor() {
         this.board = createEmptyBoard();
         this.score = 0;
         this.difficulty = 'easy';
-        this.timeLeft = 0;
+        this.timeLeft = DIFFICULTY_TIMES[this.difficulty];
     }
     initGame() {
         this.board = createEmptyBoard();
+        this.addNewTile();
         this.score = 0;
-        this.addNewTile();
-        this.addNewTile();
     }
     addNewTile() {
         const emptyTiles = findEmptyTiles(this.board);
         if (emptyTiles.length > 0) {
             const { row, col } = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
-            this.board[row][col] = 2;
+            this.board[row][col] = Math.random() < 0.9 ? 2 : 4;
         }
     }
     updateScore(value) {
@@ -24,6 +24,10 @@ export class GameModel {
     }
     setDifficulty(difficulty) {
         this.difficulty = difficulty;
+    }
+
+    setBoard(newBoard) {
+        this.board = newBoard;
     }
     getBoard() {
         return this.board;

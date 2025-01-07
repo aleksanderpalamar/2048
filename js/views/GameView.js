@@ -1,4 +1,6 @@
+import { GRID_SIZE } from "../constants.js";
 import { formatTime } from "../utils/timerUtils.js";
+
 export class GameView {
   constructor() {
     this.gameBoard = document.getElementById("game-board");
@@ -12,23 +14,26 @@ export class GameView {
   }
   updateBoard(board) {
     this.gameBoard.innerHTML = "";
-    for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board[row].length; col++) {
-        const tile = document.createElement("div");
+    for (let row = 0; row < GRID_SIZE; row++) {
+      for (let col = 0; col < GRID_SIZE; col++) {
+        const tile = document.createElement('div')
         tile.className = `tile tile-${board[row][col]}`;
-        tile.textContent = board[row][col].toString() || "";
+        tile.textContent = board[row][col] || '';
         this.gameBoard.appendChild(tile);
       }
     }
   }
   updateScore(score) {
     this.scoreElement.textContent = score.toString();
+    if (score > 2048) {
+      this.showCongratulationsPopover();
+    }
   }
   updateTimerDisplay(timeLeft) {
     this.timerElement.textContent = formatTime(timeLeft);
   }
   showGameOverPopover() {
-    this.gameOverPopover.classList.add("hidden");
+    this.gameOverPopover.classList.remove("hidden");
   }
   showCongratulationsPopover() {
     this.congratulationsPopover.classList.remove("hidden");
