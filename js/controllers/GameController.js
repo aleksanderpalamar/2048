@@ -31,17 +31,18 @@ export class GameController {
       this.view.updateBoard(this.game.getBoard());
       this.view.updateScore(this.game.getScore());
 
-      // Verificar se o jogador alcançou 2048
-      if (this.hasWon(newBoard)) {
-        this.view.showCongratulationsPopover();
+      if (this.checkFor2048Tile(newBoard)) {
+        this.view.showCongratulationPopover();
         this.endGame();
-      }
-      // Verificar se ainda existem movimentos válidos
-      else if (!this.game.hasValidMoves()) {
+      } else if (!this.game.hasValidMoves()) {
         this.view.showNoMovesPopover();
         this.endGame();
       }
     }
+  }
+
+  checkFor2048Tile(board) {
+    return board.some(row => row.some(cell => cell === 2048));
   }
 
   setDifficulty(difficulty) {

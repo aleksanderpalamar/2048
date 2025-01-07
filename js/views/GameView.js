@@ -35,9 +35,7 @@ export class GameView {
   showGameOverPopover() {
     this.gameOverPopover.classList.remove("hidden");
   }
-  showCongratulationsPopover() {
-    this.congratulationsPopover.classList.remove("hidden");
-  }
+  
   showNoMovesPopover() {
     this.noMovesPopover.classList.remove("hidden");
   }
